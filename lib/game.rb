@@ -29,15 +29,27 @@ module Hangman
 
     def new_turn
       display
-      print "Enter guess: "
-      guess = gets.chomp.upcase
+      guess = fetch_guess
       if guess == 'SAVE'
         save_game
       end
       guess = guess[0]
       unless @answer.check(guess)
         @incorrect_guesses.push(guess)
+        @incorrect_guesses = @incorrect_guesses.sort
       end
+    end
+
+    def fetch_guess
+      guess = ' '
+      until guess[0] &&
+            guess.upcase[0].between?('A','Z') &&
+            !@incorrect_guesses.include?(guess.upcase[0]) ||
+            guess.upcase == 'SAVE'
+        print "Enter guess: "
+        guess = gets.chomp.upcase
+      end
+      guess
     end
 
     def display
