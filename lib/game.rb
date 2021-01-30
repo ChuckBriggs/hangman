@@ -30,7 +30,11 @@ module Hangman
     def new_turn
       display
       print "Enter guess: "
-      guess = gets.chomp.upcase[0]
+      guess = gets.chomp.upcase
+      if guess == 'SAVE'
+        save_game
+      end
+      guess = guess[0]
       unless @answer.check(guess)
         @incorrect_guesses.push(guess)
       end
@@ -38,6 +42,11 @@ module Hangman
 
     def display
       puts "\n#{@answer.display}\n\nIncorrect guesses: #{@incorrect_guesses.join(', ')}\n\n"
+    end
+
+    def save_game
+      puts "Game saved. (Not really.)"
+      exit
     end
   end
 end
