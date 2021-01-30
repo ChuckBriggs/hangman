@@ -37,10 +37,12 @@ module Hangman
 
     def winner
       puts "#{answer.join.capitalize}. You win."
+      exit
     end
 
     def loser
       puts "#{answer.join.capitalize}. You lose."
+      exit
     end
 
     private
