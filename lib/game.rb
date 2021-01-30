@@ -2,6 +2,11 @@
 #require 'pry'; binding.pry #rubocop:disable all
 
 require_relative 'answer'
+require 'msgpack'
+require 'json'
+require 'yaml'
+
+#include 
 
 DICTIONARY = '5desk.txt'
 GAME_LENGTH = 6
@@ -57,8 +62,19 @@ module Hangman
     end
 
     def save_game
-      puts "Game saved. (Not really.)"
+      dump = YAML.dump(self)
+      File.open('.savegame', 'w') { |file| file.write(dump) }
+      puts "Game saved."
       exit
+    end
+
+    def self.load_game
+      # asdf >>
+      saved_game = File.open('.savegame', 'r')
+      object = YAML.load(saved_game)
+      saved_game.close
+      object
+      # << asdf
     end
   end
 end

@@ -9,7 +9,6 @@ module Hangman
         @answer = File.readlines(dictionary).sample.chomp.split('')
       end
       @answer = @answer.map { |x| x = x.upcase }
-      p @answer
       @visible_answer = []
       while @visible_answer.length < @answer.length
         @visible_answer.push('_')
@@ -36,12 +35,19 @@ module Hangman
     end
 
     def winner
-      puts "#{answer.join.capitalize}. You win."
+      puts "\n#{@answer.join(' ')}\n\n"
+      puts "You win.\n\n"
+      if File.exist?('.savegame')
+        File.delete('.savegame')
+      end
       exit
     end
 
     def loser
-      puts "#{answer.join.capitalize}. You lose."
+      puts "\nYou lose. The answer was \"#{answer.join.downcase}\".\n\n"
+      if File.exist?('.savegame')
+        File.delete('.savegame')
+      end
       exit
     end
 
