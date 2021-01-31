@@ -2,11 +2,7 @@
 #require 'pry'; binding.pry #rubocop:disable all
 
 require_relative 'answer'
-require 'msgpack'
-require 'json'
 require 'yaml'
-
-#include 
 
 DICTIONARY = '5desk.txt'
 GAME_LENGTH = 6
@@ -20,9 +16,7 @@ module Hangman
     end
 
     def play
-      while @incorrect_guesses.length < GAME_LENGTH && @answer.solved? == false
-        new_turn
-      end
+      new_turn while @incorrect_guesses.length < GAME_LENGTH && @answer.solved? == false
       if @incorrect_guesses.length >= GAME_LENGTH
         @answer.loser
       elsif @answer.solved? == true
@@ -35,9 +29,7 @@ module Hangman
     def new_turn
       display
       guess = fetch_guess
-      if guess == 'SAVE'
-        save_game
-      end
+      save_game if guess == 'SAVE'
       guess = guess[0]
       unless @answer.check(guess)
         @incorrect_guesses.push(guess)
@@ -48,10 +40,10 @@ module Hangman
     def fetch_guess
       guess = ' '
       until guess[0] &&
-            guess.upcase[0].between?('A','Z') &&
+            guess.upcase[0].between?('A', 'Z') &&
             !@incorrect_guesses.include?(guess.upcase[0]) ||
             guess.upcase == 'SAVE'
-        print "Enter guess: "
+        print 'Enter guess: '
         guess = gets.chomp.upcase
       end
       guess
@@ -64,17 +56,15 @@ module Hangman
     def save_game
       dump = YAML.dump(self)
       File.open('.savegame', 'w') { |file| file.write(dump) }
-      puts "Game saved."
+      puts 'Game saved.'
       exit
     end
 
     def self.load_game
-      # asdf >>
       saved_game = File.open('.savegame', 'r')
       object = YAML.load(saved_game)
       saved_game.close
       object
-      # << asdf
     end
   end
 end
